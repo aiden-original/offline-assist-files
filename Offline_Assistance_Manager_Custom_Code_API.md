@@ -365,11 +365,11 @@ Remove one editable field. All remaining fields are automatically removed when t
 
 ### `createButton(options)`
 
-Create a touchable overlay button. x/y are screen pixels; optional width/height are dp (default 160×56 dp). Colours accept #RRGGBB or #AARRGGBB. Use iconResourceId with iconPosition (left, right, top, bottom, only) and iconSize (dp) for an IMAGE resource. Optional pressedIconResourceId and disabledIconResourceId select IMAGE resources for those button states. Returns a handle with id and created. Up to 16 buttons may exist per script execution.
+Create a touchable overlay button. x/y are screen pixels; optional width/height are dp (default 160×56 dp). Set draggable: true to let the user move the button; a drag updates the stored x/y position and a short tap still activates it. Colours accept #RRGGBB or #AARRGGBB. Use iconResourceId with iconPosition (left, right, top, bottom, only) and iconSize (dp) for an IMAGE resource. Optional pressedIconResourceId and disabledIconResourceId select IMAGE resources for those button states. Returns a handle with id and created. Up to 16 buttons may exist per script execution.
 
 ### `updateButton(button, options)`
 
-Update an existing button. Only supplied fields change; omitted fields keep their current values.
+Update an existing button. Only supplied fields change; omitted fields keep their current values. Set draggable to enable or disable dragging.
 
 ### `waitForButtonPress(button, timeoutMs)`
 
@@ -377,11 +377,15 @@ Wait for a physical press on the button overlay. Returns pressed, timedOut and c
 
 ### `getButtonState(button)`
 
-Return whether the button exists, is visible, enabled and currently pressed.
+Return whether the button exists, is visible, enabled and currently pressed, plus its current x/y screen position.
 
 ### `removeButton(button)`
 
 Remove one button. Every remaining button is automatically removed when the script ends.
+
+### `monitorUserInteraction(grid, timeoutMs)`
+
+Wait for the next accessibility-reported tap or scroll event. Pass a grid object or named grid ID to map a tap into zero-based row and column values. For taps, x/y are the centre of the clicked accessibility node, not the exact finger position. Scroll events include direction and deltaX/deltaY. The function observes `TYPE_VIEW_CLICKED` and `TYPE_VIEW_SCROLLED` events while the call is active; it does not intercept touch input or enable touch-exploration mode. A launcher or app that does not expose page swipes as accessibility scroll events cannot be monitored this way. Timeout defaults to 30 seconds and is capped at 180 seconds. Returns `found`, `type`, `direction`, `x`, `y`, `row`, `column`, `cellFound`, `timedOut` and `cancelled`.
 
 ### `click(x, y, count, intervalMs)`
 
